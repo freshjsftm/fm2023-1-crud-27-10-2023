@@ -5,7 +5,7 @@ CREATE TABLE "things"(
   "createdAt" TIMESTAMP NOT NULL DEFAULT current_timestamp
 );
 --create
-INSERT INTO "things"("body") VALUES ('test text 2') RETURNING *;
+INSERT INTO "things"("body") VALUES ('test text 3') RETURNING *;
 --update
 UPDATE "things" 
 SET "body"='new text', "updatedAt"=current_timestamp
