@@ -1,8 +1,11 @@
 const express = require('express');
-const { getAllThings } = require('./controllers/thing.controller');
+const ThingController = require('./controllers/thing.controller');
 const app = express();
 
-app.get('/things', getAllThings)
+app.use(express.json());
 
+app.get('/things', ThingController.getAllThings);
+
+app.post('/things', ThingController.createThing);
 
 module.exports = app;
