@@ -44,17 +44,55 @@ class Thing {
   }
   static async findByPk(pk) {
     try {
-      const result = await this.client.query(`
+      const { rows } = await this.client.query(`
       SELECT *
       FROM ${this.tableName}
       WHERE "id"=${pk};
     `);
-      return result;
+      return rows;
     } catch (error) {
       console.log(error);
     }
   }
-  static async updateByPk(pk) {}
+
+  // UPDATE "things"
+  // SET "body"='new text', "updatedAt"=current_timestamp
+  // WHERE "id"=1;
+  static async updateByPk(pk, values) {
+    try {
+      const insertAttrs = Object.entries(this.attributes)
+        .filter(([attr, domain]) => attr in values)
+        .map(([attr, domain]) => attr);
+
+      let setRow = insertAttrs.map((attr) => {
+        const value = values[attr];
+        const typeValue = typeof this.attributes[attr];
+        const valueStr =  typeValue === 'string' ? `'${value}'` : value;
+        const pareStr = `"${attr}"=${valueStr}`
+        return pareStr;
+      }).join(',');
+
+      if('updatedAt' in values){
+        console.log(values['updatedAt']);
+      }else{
+        setRow += `,"updatedAt"='${new Date().toISOString()}'`;
+      }
+
+      console.log('setRow---------->',setRow);
+
+      const { rows } = await this.client.query(`
+        UPDATE ${this.tableName}
+        SET ${setRow}
+        WHERE "id"=${pk}
+        RETURNING *;        
+        `);
+
+      return rows;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   static async deleteByPk(pk) {}
 }
 
