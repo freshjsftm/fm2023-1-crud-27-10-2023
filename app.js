@@ -4,12 +4,18 @@ const app = express();
 
 app.use(express.json());
 
-app.get('/things', ThingController.getAllThings);
+// app.get('/things', ThingController.getAllThings);
+// app.post('/things', ThingController.createThing);
 
-app.get('/things/:idThing', ThingController.getThing);
+app
+  .route('/things')
+  .get(ThingController.getAllThings)
+  .post(ThingController.createThing);
 
-app.put('/things/:idThing', ThingController.updateThing);
-
-app.post('/things', ThingController.createThing);
+app
+  .route('/things/:idThing')
+  .get(ThingController.getThing)
+  .put(ThingController.updateThing)
+  .delete(ThingController.deleteThing);
 
 module.exports = app;

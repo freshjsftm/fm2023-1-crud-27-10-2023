@@ -93,6 +93,8 @@ class Thing {
     }
   }
 
+  
+//DELETE FROM "things" WHERE "id"=2;
   static async deleteByPk(pk) {}
 }
 
